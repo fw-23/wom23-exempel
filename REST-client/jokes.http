@@ -1,0 +1,18 @@
+@apiUrl = https://v2.jokeapi.dev/joke
+
+# Programming jokes
+
+GET {{apiUrl}}/Programming?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&type=twopart
+
+### 
+
+# Puns
+GET {{apiUrl}}/Pun?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&type=twopart
+
+
+###  POST-exempel (samma system för PUT/PATCH)
+POST https://urlen
+Content-Type: application/json
+
+{ "hello": "world" }
+
