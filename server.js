@@ -3,10 +3,17 @@ const pokemon = require('pokemon') // Behövs inte för att express ska funka :)
 const app = express()
 const PORT = 3030
 
+// middleware-funktion
 const myMiddleware = (req, res, next) => {
     console.log("Hello middleware")
     next()
 }
+const weekdayNames = (req, res, next) => {
+    console.log("Hello other middleware")
+    req.weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    next()
+}
+
 
 app.get('/', (req, res) => {
     console.log(`GET request to / from ${req.ip}`)
@@ -28,16 +35,14 @@ app.get('/hello/:name', (req, res) => {
 })
 
 
-app.get('/weekdays/:wd', (req, res) => {
+app.get('/weekdays/:wd', weekdayNames, (req, res) => {
     const wd = req.params.wd
-    const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-    res.send(weekdays[wd-1])
+    res.send(req.weekdays[wd-1])
 })
-
 
 app.get('/pokemon', (req, res) => {
     res.send(`Random: 
-        ${pokemon.getName(Math.round(Math.random()*152))}
+        ${pokemon.getName(Math.ceil(Math.random()*152))}
     `)
 })
 app.get('/pokemon/:id', (req, res) => {
