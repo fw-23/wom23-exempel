@@ -1,0 +1,7 @@
+@apiUrl = http://localhost:3030/notes
+
+###
+GET {{apiUrl}}
+
+###
+POST {{apiUrl}}
