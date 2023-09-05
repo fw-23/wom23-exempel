@@ -1,5 +1,4 @@
 const express = require('express')
-const pokemon = require('pokemon') // Behövs inte för att express ska funka :)
 const app = express()
 const PORT = 3030
 
@@ -14,43 +13,29 @@ const weekdayNames = (req, res, next) => {
     next()
 }
 
+// behövs för att kunna ta emot JSON i request-bodyn
+app.use(express.json())
 
 app.get('/', (req, res) => {
     console.log(`GET request to / from ${req.ip}`)
     res.send('Mainpage!')
 })
 
+
+
+const notesRouter = require('./routes/notes')
+app.use('/notes', notesRouter)
+
+const pokeRouter = require('./routes/pokemon')
+app.use('/pokemon', pokeRouter)
+
 // Middleware exekveras på det stället i koden där den sätts in med app.use()
 app.use(myMiddleware)
-
-// Vi kan ha flera /hello, om inte den första matchar går programmet vidare till nästa
-app.get('/hello', (req, res) => {
-    console.log("GET request to hello")
-    res.send('Hello-route')
-})
-app.get('/hello/:name', (req, res) => {
-    console.log(req.params) // route-params, här name
-    console.log(req.query) // för query-stringen, t.ex. ?foo=bar
-    res.send(`Hello, ${req.params.name} `)
-})
-
 
 app.get('/weekdays/:wd', weekdayNames, (req, res) => {
     const wd = req.params.wd
     res.send(req.weekdays[wd-1])
 })
-
-app.get('/pokemon', (req, res) => {
-    res.send(`Random: 
-        ${pokemon.getName(Math.ceil(Math.random()*152))}
-    `)
-})
-app.get('/pokemon/:id', (req, res) => {
-    res.send(`Pokemon #${req.params.id} is 
-        ${pokemon.getName(req.params.id)}
-    `)
-})
-
 
 
 console.log("Morjens Node!") 
