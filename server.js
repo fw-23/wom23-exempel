@@ -21,10 +21,10 @@ app.get('/', (req, res) => {
     res.send('Mainpage!')
 })
 
-const notesRouter = require('./routes/notes')
+const notesRouter = require('./routes/notes.js')
 app.use('/notes', notesRouter)
 
-const pokeRouter = require('./routes/pokemon')
+const pokeRouter = require('./routes/pokemon.js')
 app.use('/pokemon', pokeRouter)
 
 // Middleware exekveras på det stället i koden där den sätts in med app.use()
