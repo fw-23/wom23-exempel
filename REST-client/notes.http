@@ -5,3 +5,21 @@ GET {{apiUrl}}
 
 ###
 POST {{apiUrl}}
+Content-Type: application/json
+
+{
+    "text": "My note"
+}
+
+### 
+PATCH {{apiUrl}}/100
+Content-Type: application/json
+
+{
+    "text": "My note"
+}
+
+###
+DELETE {{apiUrl}}/100
+
+###

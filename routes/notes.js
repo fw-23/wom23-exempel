@@ -8,4 +8,24 @@ router.get('/', (req, res) => {
     res.send({ msg: 'notes'})
 })
 
+router.post('/', (req, res) => {
+    console.log(req)
+    res.send({ msg: 'post', reqBody: req.body})
+})
+
+router.patch('/:id', (req, res) => {
+    res.send({ 
+        msg: 'patch', 
+        id: req.params.id,
+        reqBody: req.body
+    })
+})
+
+router.delete('/:id', (req, res) => {
+    res.send({ 
+        msg: 'delete', 
+        id: req.params.id
+    })
+})
+
 module.exports = router

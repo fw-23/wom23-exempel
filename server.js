@@ -21,8 +21,6 @@ app.get('/', (req, res) => {
     res.send('Mainpage!')
 })
 
-
-
 const notesRouter = require('./routes/notes')
 app.use('/notes', notesRouter)
 
