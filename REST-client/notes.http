@@ -1,22 +1,27 @@
 @apiUrl = http://localhost:3030/notes
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1IiwiZW1haWwiOiJmcmVkZGVAZm9vLmJhciIsIm5hbWUiOiJGcmVkZGUiLCJpYXQiOjE1MTYyMzkwMjJ9.yvwLFEo9wimrHujR_g3pFb8YFoZRrIPGTqdmkGG-hnU
 
 ###
 GET {{apiUrl}}
+Authorization: Bearer {{token}}
+
 
 ###
 GET {{apiUrl}}/64f9a89c3192a9bf9d0e740a
-
+Authorization: Bearer {{token}}
 
 ###
 POST {{apiUrl}}
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "text": "Another note"
+    "text": "My own note"
 }
 
 ### 
 PATCH {{apiUrl}}/64f9a89c3192a9bf9d0e740a
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -25,5 +30,6 @@ Content-Type: application/json
 
 ###
 DELETE {{apiUrl}}/64f9aa07539b7df1d8de2397
+Authorization: Bearer {{token}}
 
 ###
