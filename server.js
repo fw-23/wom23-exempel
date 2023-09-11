@@ -1,10 +1,9 @@
 const express = require('express')
 const app = express()
 const auth = require('./middleware/auth')
-const PORT = 3030
+const PORT = process.env.PORT || 3030
 
 // middleware-funktion
-
 app.use(auth)
 
 // behövs för att kunna ta emot JSON i request-bodyn

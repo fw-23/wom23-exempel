@@ -1,5 +1,6 @@
-@apiUrl = http://localhost:3030/notes
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1IiwiZW1haWwiOiJmcmVkZGVAZm9vLmJhciIsIm5hbWUiOiJGcmVkZGUiLCJpYXQiOjE1MTYyMzkwMjJ9.yvwLFEo9wimrHujR_g3pFb8YFoZRrIPGTqdmkGG-hnU
+#@apiUrl = http://localhost:3030/notes
+@apiUrl = https://notes-fredde-23.azurewebsites.net/notes
+@token = {{$dotenv TOKEN}}
 
 ###
 GET {{apiUrl}}
