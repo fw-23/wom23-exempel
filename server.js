@@ -17,6 +17,9 @@ app.get('/', (req, res) => {
 const notesRouter = require('./routes/notes.js')
 app.use('/notes', notesRouter)
 
+const usersRouter = require('./routes/users.js')
+app.use('/users', usersRouter)
+
 console.log("Morjens Node!") 
 
 app.listen(PORT, () => {
