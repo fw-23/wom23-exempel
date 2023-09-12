@@ -1,10 +1,10 @@
 const express = require('express')
+const cors = require('cors')
 const app = express()
 const auth = require('./middleware/auth')
 const PORT = process.env.PORT || 3030
 
-// middleware-funktion
-app.use(auth)
+app.use(cors())
 
 // behövs för att kunna ta emot JSON i request-bodyn
 app.use(express.json())
@@ -14,11 +14,16 @@ app.get('/', (req, res) => {
     res.send('Mainpage!')
 })
 
+const usersRouter = require('./routes/users.js')
+app.use('/users', usersRouter)
+
+// middleware-funktion, validerar jwt
+app.use(auth)
+
 const notesRouter = require('./routes/notes.js')
 app.use('/notes', notesRouter)
 
-const usersRouter = require('./routes/users.js')
-app.use('/users', usersRouter)
+
 
 console.log("Morjens Node!") 
 

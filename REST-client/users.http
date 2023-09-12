@@ -6,14 +6,21 @@
 GET {{apiUrl}}
 Authorization: Bearer {{token}}
 
-
 ###
 GET {{apiUrl}}/64f9a89c3192a9bf9d0e740a
 Authorization: Bearer {{token}}
 
+### Logga in på /users/login
+POST {{apiUrl}}/login
+Content-Type: application/json
+
+{
+    "email": "fredde@foo.baz",
+    "password": "Password123"
+}
+
 ### skapa ny användare
 POST {{apiUrl}}
-Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -27,7 +34,7 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "text": "My updated note"
+    "password": "Password123"
 }
 
 ###
