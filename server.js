@@ -14,6 +14,9 @@ app.get('/', (req, res) => {
     res.send('Mainpage!')
 })
 
+// statiska sidor i public-katalogen
+app.use('/public', express.static(__dirname + '/public'))
+
 const usersRouter = require('./routes/users.js')
 app.use('/users', usersRouter)
 
