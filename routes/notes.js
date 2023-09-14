@@ -7,25 +7,35 @@ const prisma = new PrismaClient()
 router.get('/', async (req, res) => {
 
     const notes = await prisma.notes.findMany({
-       where: { userId: req.authUser.sub } 
+        where: { userId: req.authUser.sub }
     })
 
     console.log("notes GET")
-    res.send({ 
-        msg: 'notes', 
+    res.send({
+        msg: 'notes',
         notes: notes,
-        authorizedUserId: req.authUser.sub 
+        authorizedUserId: req.authUser.sub
     })
 })
 
 router.get('/:id', async (req, res) => {
 
-    const note = await prisma.notes.findUnique({
-        where: {id: req.params.id}
-    })
+    try {
 
-    console.log("notes GET ONE")
-    res.send({ msg: 'notes', note: note })
+        const note = await prisma.notes.findUnique({
+            where: { id: req.params.id }
+        })
+
+        console.log("notes GET ONE")
+        res.send({ msg: 'notes', note: note })
+        
+    } catch (err) {
+        console.log(err)
+        res.status(404).send({
+            msg: 'ERROR',
+            error: 'Note not found'
+        })
+    }
 })
 
 
@@ -48,7 +58,8 @@ router.patch('/:id', async (req, res) => {
             id: req.params.id,
         },
         data: {
-            noteText: req.body.text
+            noteText: req.body.text,
+            updatedAt: new Date()
         },
     })
     res.send({
@@ -75,9 +86,9 @@ router.delete('/:id', async (req, res) => {
     } catch (err) {
 
         console.log(err)
-        res.send({
+        res.status(400).send({
             msg: 'ERROR',
-            error: err
+            error: 'Note not found'
         })
     }
 })

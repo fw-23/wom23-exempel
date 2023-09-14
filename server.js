@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const app = express()
-const auth = require('./middleware/auth')
+const authorizeToken = require('./middleware/auth')
 const PORT = process.env.PORT || 3030
 
 app.use(cors())
@@ -17,15 +17,14 @@ app.get('/', (req, res) => {
 // statiska sidor i public-katalogen
 app.use('/public', express.static(__dirname + '/public'))
 
+// middleware-funktion, validerar jwt
+//  app.use(authorizeToken)
+// Middlewaren kan också vara i själva route-funktionen:
+const notesRouter = require('./routes/notes.js')
+app.use('/notes', authorizeToken, notesRouter)
+
 const usersRouter = require('./routes/users.js')
 app.use('/users', usersRouter)
-
-// middleware-funktion, validerar jwt
-app.use(auth)
-
-const notesRouter = require('./routes/notes.js')
-app.use('/notes', notesRouter)
-
 
 
 console.log("Morjens Node!") 
