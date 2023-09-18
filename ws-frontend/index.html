@@ -11,8 +11,8 @@
 <!-- Works with ws-node in this repo -->
     
 <body>
-    <input id="in" type="text" placeholder="Write to convert to upper case">
-    <p id="out">...</p>
+    <textarea id="in" type="text" placeholder="Paste here"></textarea>
+    <pre id="out">...</pre>
     <p id="err" style="color: red;"></p>
 
     <script>
@@ -27,16 +27,17 @@
             console.log('Connected to WebSocket server');
         };
 
+        
         // Message listener
         socket.onmessage = function (event) {
             console.log('Received message:', event.data);
             const data = JSON.parse(event.data);
 
-            if (data.status == 0) {
-                document.querySelector('#out').innerHTML = data.msg;
-                document.querySelector('#err').innerHTML = '';
-            } else {
-                document.querySelector('#err').innerHTML = data.msg;
+            if (data.type == 'paste') {
+                document.querySelector('#out').innerText = data.text;
+                document.querySelector('#err').innerText = '';
+            } else if (data.type == 'error') {
+                document.querySelector('#err').innerText = data.msg;
             }
             
         };
@@ -47,7 +48,10 @@
         };
 
         document.querySelector('#in').addEventListener('input', (evt) => {
-            socket.send(evt.target.value);
+            socket.send(JSON.stringify({
+                type: 'paste',
+                text: evt.target.value
+            }));
         });
     </script>
 
