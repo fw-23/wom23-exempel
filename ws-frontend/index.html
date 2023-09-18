@@ -11,23 +11,32 @@
 <!-- Works with ws-node in this repo -->
     
 <body>
-    <textarea id="in" type="text" placeholder="Paste here"></textarea>
-    <pre id="out">...</pre>
+    <input id="in" type="text" placeholder="Paste here">
+    <p id="out">...</p>
     <p id="err" style="color: red;"></p>
 
     <script>
-        WS_TOKEN = localStorage.getItem('ws_token') || 'my-secret-token';
-        console.log(WS_TOKEN);
 
+        if (!localStorage.getItem('pastebin_token')) {
+            localStorage.setItem('pastebin_token', prompt('Enter token'));
+        }
+
+        WS_TOKEN = localStorage.getItem('pastebin_token') || 'my-secret-token';
+        
+        // wss = SSL-krypterad
+        WS_URL = `wss://wom-ws-pastebin.azurewebsites.net?token=${WS_TOKEN}` 
+        // WS_URL = ``ws://localhost:5000?token=${WS_TOKEN}`
+
+        console.log(WS_URL)
+        
         // Create a WebSocket connection
-        const socket = new WebSocket(`ws://localhost:5000?token=${WS_TOKEN}`);
+        const socket = new WebSocket(WS_URL);
 
         // Connection established 
         socket.onopen = function (event) {
             console.log('Connected to WebSocket server');
         };
 
-        
         // Message listener
         socket.onmessage = function (event) {
             console.log('Received message:', event.data);
