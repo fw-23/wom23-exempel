@@ -1,34 +1,52 @@
-const express = require('express')
-const cors = require('cors')
-const app = express()
-const authorizeToken = require('./middleware/auth')
-const PORT = process.env.PORT || 3030
+const WebSocket = require('ws')
+const os = require('os')
+require('dotenv').config()
 
-app.use(cors())
+const PORT = process.env.PORT || 5000
+const wss = new WebSocket.Server({ port: PORT });
 
-// behövs för att kunna ta emot JSON i request-bodyn
-app.use(express.json())
+// URL example: ws://my-server?token=my-secret-token
+wss.on('connection', (ws, req) => {
+    console.log('Client connected');
 
-app.get('/', (req, res) => {
-    console.log(`GET request to / from ${req.ip}`)
-    res.send('Mainpage!')
-})
+    // Check valid token (set token in .env as TOKEN=my-secret-token )
+    const urlParams = new URLSearchParams(req.url.slice(1));
+    if (urlParams.get('token') !== process.env.WS_TOKEN) {
+        console.log('Invalid token: ' + urlParams.get('token'));
+        ws.send(JSON.stringify({
+            status: 1,
+            msg: 'ERROR: Invalid token.'
+        }));
+        ws.close();
+    }
 
-// statiska sidor i public-katalogen
-app.use('/public', express.static(__dirname + '/public'))
+    ws.on('message', (message) => {
+        console.log('Received message:', message);
 
-// middleware-funktion, validerar jwt
-//  app.use(authorizeToken)
-// Middlewaren kan också vara i själva route-funktionen:
-const notesRouter = require('./routes/notes.js')
-app.use('/notes', authorizeToken, notesRouter)
+        // Send a response back to the client along with some other info
+        ws.send(JSON.stringify({
+            type: 'mess',
+            status: 0,
+            msg: String(message).toUpperCase(),
+            freemem: Math.round(os.freemem() / 1024 / 1024), // MB
+            totalmem: Math.round(os.totalmem() / 1024 / 1024) // MB
+        }));
+    });
 
-const usersRouter = require('./routes/users.js')
-app.use('/users', usersRouter)
+    ws.on('close', () => {
+        console.log('Client disconnected');
+    });
 
 
-console.log("Morjens Node!") 
+    setInterval(() => {
+        ws.send(JSON.stringify({
+            type: 'random', 
+            status: 0, 
+            msg: Math.ceil(Math.random()*100) 
+        }))
+    }, 500)
+    
 
-app.listen(PORT, () => {
-    console.log(`Server listening on http://localhost:${PORT}`)
-})
+});
+
+
