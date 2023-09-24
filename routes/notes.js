@@ -23,12 +23,12 @@ router.get('/:id', async (req, res) => {
     try {
 
         const note = await prisma.notes.findUnique({
-            where: { id: req.params.id }
+            where: { id: parseInt(req.params.id) }
         })
 
         console.log("notes GET ONE")
         res.send({ msg: 'notes', note: note })
-        
+
     } catch (err) {
         console.log(err)
         res.status(404).send({
@@ -53,20 +53,31 @@ router.post('/', async (req, res) => {
 
 router.patch('/:id', async (req, res) => {
 
-    const note = await prisma.notes.update({
-        where: {
+    try {
+
+        const note = await prisma.notes.update({
+            where: {
+                id: parseInt(req.params.id),
+            },
+            data: {
+                noteText: req.body.text,
+                updatedAt: new Date()
+            },
+        })
+        res.send({
+            msg: 'patch',
             id: req.params.id,
-        },
-        data: {
-            noteText: req.body.text,
-            updatedAt: new Date()
-        },
-    })
-    res.send({
-        msg: 'patch',
-        id: req.params.id,
-        note: note
-    })
+            note: note
+        })
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({
+            msg: 'ERROR',
+            error: 'Something went wrong'
+        })
+
+    }
 })
 
 router.delete('/:id', async (req, res) => {
@@ -75,7 +86,7 @@ router.delete('/:id', async (req, res) => {
 
         const note = await prisma.notes.delete({
             where: {
-                id: req.params.id,
+                id: parseInt(req.params.id),
             }
         })
         res.send({
